@@ -317,20 +317,14 @@ class SQLighter:
             self.cursor.execute(sqlite_select_query, (user_id,))
             records = self.cursor.fetchall()
             return bool(len(records))
-    def all_in_rozkla(self, day,groupp):
+    def all_in_rozkla(self, groupp):
         with self.connection:
             try:
                 sqlite_se = """SELECT * FROM rozkla WHERE groupp = ?"""
                 self.cursor.execute(sqlite_se, (groupp,))
                 records = self.cursor.fetchall()
                 return records
-                #return self.cursor.execute("SELECT * FROM `rozkla` WHERE 'day'= ?, `groupp` = ?", (day,groupp,)).fetchall()
-                #for row in records:
-                #    cc = " "
-                #    if row[0] == day:
-                #        cc = row[2]
-                #    else:
-                #        cc = row[2]
+                
                     
             except sqlite3.Error as error:
                 print("Ошибка при работе с SQLite", error)

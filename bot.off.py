@@ -14,12 +14,7 @@ from contextlib import suppress
 
 from aiogram import types
 
-import telebot
-from telebot import types
 
-bt = telebot.TeleBot(token = TOKEN)
-
-user_dict = {}
 
 
 from aiogram.types import ReplyKeyboardRemove, \
@@ -904,31 +899,24 @@ async def process_command_1(message: types.Message):
 
 @dp.message_handler(text=["Расписание"])
 async def allsa_prover(message: types.Message):
-	try:
-		import datetime
-		from datetime import date
-		now = datetime.datetime.now()
-		dt = datetime.date(now.year, now.month, now.day)
-		wk = dt.isocalendar()[1]
-		iso = (wk & 1) == 0
-		gg = db.group(message.from_user.id)
-		dda = str(now.isoweekday())
-		if db.group(message.from_user.id) == str(gg):
-			fd = db.all_in_rozkla(now.isoweekday(),gg)
-			for row in fd:
-				day= row[0]
-			if day == dda:
-				await bot.send_message(message.from_user.id, row[2])
-				fun = True
-					#break
-			else:
-				fun = False
-			if fun == True:
-				pass
-			elif fun == False:
-				await bot.send_message(message.from_user.id, "Извените но для вас нету расписания(возможно его ещё не добавили)")
-	except ValueError as err:
-		await bot.send_message(admin_id, str(err))
+	import datetime
+	from datetime import date
+	now = datetime.datetime.now()
+	dt = datetime.date(now.year, now.month, now.day)
+	wk = dt.isocalendar()[1]
+	iso = (wk & 1) == 0
+	gg = db.group(message.from_user.id)
+	dda = str(now.isoweekday())
+	#if db.group(message.from_user.id) == str(gg):
+	fd = db.all_in_rozkla(gg)
+	for row in fd:
+		if row[0] == dda:
+			await bot.send_message(message.from_user.id, str(row[2]))
+			fun = True
+			#break
+
+	if fun == False:
+		await bot.send_message(message.from_user.id, "Извените но для вас нету расписания(возможно его ещё не добавили)")
 	messa(message)
 
 
